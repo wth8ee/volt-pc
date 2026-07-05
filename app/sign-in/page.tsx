@@ -20,16 +20,13 @@ export default function SignInPage() {
     setError("");
     setLoading(true);
 
-    // Вызываем метод авторизации Better Auth по связке email + password
     const { error: authError } = await authClient.signIn.email({
       email,
       password,
-      // Автоматически перенаправляем на главную после успешного входа
       callbackURL: "/",
     });
 
     if (authError) {
-      // Если пароль не подошел или юзера нет, Better Auth вернет понятную ошибку
       setError(authError.message || "Неверный email или пароль.");
       setLoading(false);
     } else {
@@ -49,7 +46,6 @@ export default function SignInPage() {
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center p-4 selection:bg-zinc-950 selection:text-white relative">
-      {/* Кнопка возврата: тонкий мелкий шрифт */}
       <div className="w-full max-w-sm mb-6">
         <Link
           href="/"
@@ -60,9 +56,7 @@ export default function SignInPage() {
         </Link>
       </div>
 
-      {/* Контейнер строгой прямоугольной формы */}
       <div className="w-full max-w-sm bg-white border border-zinc-200 rounded-none p-6 md:p-8">
-        {/* Заголовок */}
         <div className="flex flex-col items-center text-center mb-8">
           <div className="h-10 w-10 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-950 mb-3">
             <LogIn className="h-4 w-4 stroke-[1.5]" />
@@ -76,7 +70,6 @@ export default function SignInPage() {
         </div>
 
         <form onSubmit={handleSignIn} className="space-y-4">
-          {/* Поле: Email */}
           <div className="space-y-1.5">
             <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
               Email адрес
@@ -94,7 +87,6 @@ export default function SignInPage() {
             </div>
           </div>
 
-          {/* Поле: Пароль */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
@@ -120,14 +112,12 @@ export default function SignInPage() {
             </div>
           </div>
 
-          {/* Блок ошибок Better Auth */}
           {error && (
             <div className="p-3 rounded-none bg-zinc-50 border border-zinc-200 text-red-600 text-[11px] font-bold text-center">
               {error}
             </div>
           )}
 
-          {/* Кнопка входа — брутальная черная плита */}
           <button
             type="submit"
             disabled={loading}
@@ -144,7 +134,6 @@ export default function SignInPage() {
           </button>
         </form>
 
-        {/* Ссылка на регистрацию */}
         <div className="text-center mt-6 pt-4 border-t border-zinc-200 text-xs font-semibold text-zinc-400">
           Впервые у нас?{" "}
           <Link

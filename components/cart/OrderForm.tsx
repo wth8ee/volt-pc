@@ -87,7 +87,6 @@ export default function OrderForm() {
       </div>
 
       <form onSubmit={handleCheckout} className="space-y-4 mt-6">
-        {/* Поле: Имя */}
         <div className="space-y-1.5">
           <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
             Ваше имя
@@ -102,7 +101,6 @@ export default function OrderForm() {
           />
         </div>
 
-        {/* Поле: Email */}
         <div className="space-y-1.5">
           <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
             Email для чека
@@ -123,7 +121,6 @@ export default function OrderForm() {
           </div>
         )}
 
-        {/* Кнопка оплаты — брутальный прямоугольник */}
         <button
           type="submit"
           disabled={loading}

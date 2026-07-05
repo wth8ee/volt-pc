@@ -17,10 +17,8 @@ interface PageProps {
 }
 
 export default async function HomePage({ searchParams }: PageProps) {
-  // 1. Дожидаемся разбора параметров из URL-строки браузера
   const resolvedParams = await searchParams;
 
-  // 2. Вызываем наш Server Action напрямую на стороне сервера
   const result = await getFilteredProducts({
     category: resolvedParams.category,
     brand: resolvedParams.brand,
@@ -37,17 +35,12 @@ export default async function HomePage({ searchParams }: PageProps) {
 
   return (
     <SidebarProvider>
-      {/* Принудительно задаем странице белый фон вместо старого темного */}
       <div className="flex min-h-screen w-full bg-white text-zinc-950 selection:bg-zinc-900 selection:text-white">
-        {/* Боковая панель фильтрации */}
         <SidebarFilters />
 
-        {/* Главная контентная зона каталога */}
         <main className="flex-1 p-6 md:p-10 border-l border-zinc-200">
-          {/* Верхняя плашка управления: Тонкие линии, швейцарский шрифт */}
           <div className="flex items-center justify-between mb-10 pb-6 border-b border-zinc-200">
             <div className="flex items-center gap-4">
-              {/* Минималистичная кнопка триггера */}
               <SidebarTrigger className="bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-900 rounded-none h-10 w-10 p-0 cursor-pointer transition-colors" />
               <div>
                 <h1 className="text-2xl font-normal text-zinc-950 tracking-tight uppercase">
@@ -61,7 +54,6 @@ export default async function HomePage({ searchParams }: PageProps) {
             </div>
           </div>
 
-          {/* Условие: Если по фильтрам ничего не найдено в базе */}
           {products.length === 0 ? (
             <div className="h-[400px] border border-zinc-200 rounded-none flex flex-col items-center justify-center text-center p-8 bg-zinc-50">
               <PackageX className="w-8 h-8 text-zinc-300 mb-3 stroke-1" />
@@ -74,14 +66,12 @@ export default async function HomePage({ searchParams }: PageProps) {
               </p>
             </div>
           ) : (
-            // Строгая сетка без зазоров, карточки разделены тонкими линиями
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 border-t border-l border-zinc-200">
               {products.map((product) => (
                 <div
                   key={product.id}
                   className="bg-white border-r border-b border-zinc-200 p-6 flex flex-col justify-between hover:bg-zinc-50/50 transition-colors duration-200 group relative"
                 >
-                  {/* Изображение товара (Сливается с белым фоном карточки, создавая эффект объема) */}
                   <div className="relative aspect-square w-full bg-white overflow-hidden mb-6 flex items-center justify-center mix-blend-multiply">
                     <Image
                       src={product.images[0]}
@@ -94,7 +84,6 @@ export default async function HomePage({ searchParams }: PageProps) {
                     />
                   </div>
 
-                  {/* Инфо-блок товара */}
                   <div className="flex-1 flex flex-col justify-between">
                     <div className="mb-6">
                       <div className="flex items-center gap-2 mb-2">
@@ -115,14 +104,12 @@ export default async function HomePage({ searchParams }: PageProps) {
                       </p>
                     </div>
 
-                    {/* Зона цены и кнопки управления */}
                     <div className="pt-4 border-t border-zinc-200/60 min-h-[48px] flex items-center justify-between">
                       {product.inStock ? (
                         <>
                           <span className="text-base font-bold text-zinc-950 tracking-tight font-mono">
                             {product.price.toLocaleString("ru-RU")} ₽
                           </span>
-                          {/* Интерактивный счетчик или кнопка покупки */}
                           <AddToCartButton product={product} />
                         </>
                       ) : (

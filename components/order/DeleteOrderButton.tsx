@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { dbDeleteOrder } from "@/lib/cart-actions";
 import { Trash2, Loader2, AlertTriangle } from "lucide-react";
 
-// Импортируем компоненты Dialog из shadcn
 import {
   Dialog,
   DialogContent,
@@ -22,7 +21,7 @@ interface DeleteOrderButtonProps {
 export default function DeleteOrderButton({ orderId }: DeleteOrderButtonProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [open, setIsOpen] = useState(false); // Стейт открытия окна
+  const [open, setIsOpen] = useState(false);
 
   const handleDelete = async () => {
     setLoading(true);
@@ -39,7 +38,6 @@ export default function DeleteOrderButton({ orderId }: DeleteOrderButtonProps) {
 
   return (
     <Dialog open={open} onOpenChange={setIsOpen}>
-      {/* Триггер — наша строгая прямоугольная кнопка корзины */}
       <DialogTrigger asChild>
         <button
           className="h-8 px-3 border border-zinc-200 bg-white text-zinc-400 hover:text-red-600 hover:border-zinc-300 transition-colors flex items-center justify-center rounded-none cursor-pointer active:scale-[0.96]"
@@ -49,7 +47,6 @@ export default function DeleteOrderButton({ orderId }: DeleteOrderButtonProps) {
         </button>
       </DialogTrigger>
 
-      {/* Контент всплывающего окна в строгом швейцарском стиле */}
       <DialogContent className="bg-white border border-zinc-200 rounded-none max-w-sm p-6 gap-0 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
         <DialogHeader className="space-y-2 text-left">
           <div className="flex items-center gap-2 text-zinc-950">
@@ -66,7 +63,6 @@ export default function DeleteOrderButton({ orderId }: DeleteOrderButtonProps) {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Прямоугольные кнопки управления встык */}
         <div className="flex items-center gap-2 mt-6 pt-4 border-t border-zinc-100">
           <button
             onClick={() => setIsOpen(false)}

@@ -10,15 +10,12 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // 1. Проверяем тип события от ЮKassa
-    // Нас интересует только успешный платеж
     if (body.event !== "payment.succeeded") {
       return NextResponse.json({ status: "ignored" }, { status: 200 });
     }
 
     const paymentObject = body.object;
 
-    // 2. Вытаскиваем ID заказа из метаданных, которые мы зашили на этапе checkout
     const orderId = paymentObject.metadata?.orderId;
 
     if (!orderId) {
@@ -29,7 +26,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3. Ищем заказ в нашей базе данных Prisma
     const order = await prisma.order.findUnique({
       where: { id: orderId },
     });
@@ -39,7 +35,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // 4. Безопасность: Проверяем, совпадает ли сумма платежа с суммой заказа в нашей БД
     const paymentAmount = Math.round(parseFloat(paymentObject.amount.value));
     if (paymentAmount !== order.totalAmount) {
       console.error(
@@ -48,7 +43,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Amount mismatch" }, { status: 400 });
     }
 
-    // 5. ЖЕЛЕЗНЫЙ АПДЕЙТ: Меняем статус заказа на Успешно Оплачен
     const updatedOrder = await prisma.order.update({
       where: { id: orderId },
       data: { status: "SUCCEEDED" },

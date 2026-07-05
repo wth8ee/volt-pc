@@ -14,7 +14,6 @@ export default function CartItemList() {
           key={item.id}
           className="bg-white border-r border-b border-zinc-200 p-4 flex items-center gap-6 relative overflow-hidden group hover:bg-zinc-50/50 transition-colors duration-200"
         >
-          {/* Квадратная миниатюра товара на чистом белом фоне */}
           <div className="relative h-20 w-20 bg-white overflow-hidden p-1 shrink-0 flex items-center justify-center mix-blend-multiply">
             <img
               src={item.image}
@@ -23,9 +22,7 @@ export default function CartItemList() {
             />
           </div>
 
-          {/* Контентный блок и управление */}
           <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-w-0">
-            {/* Название и базовая цена за штуку */}
             <div className="space-y-1 max-w-70 min-w-0">
               <h4 className="font-medium text-zinc-900 text-sm leading-snug group-hover:text-zinc-600 transition-colors truncate pr-2">
                 {item.name}
@@ -35,7 +32,6 @@ export default function CartItemList() {
               </span>
             </div>
 
-            {/* Строгий прямоугольный счётчик-чертёж */}
             <div className="h-9 inline-flex items-center border border-zinc-200 rounded-none bg-white overflow-hidden shrink-0 select-none">
               <button
                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -54,7 +50,6 @@ export default function CartItemList() {
               </button>
             </div>
 
-            {/* Итоговая стоимость позиции и строгая кнопка удаления */}
             <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 min-w-[140px]">
               <span className="text-sm font-bold text-zinc-950 font-mono tracking-tight">
                 {(item.price * item.quantity).toLocaleString("ru-RU")} ₽

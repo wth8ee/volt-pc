@@ -18,13 +18,11 @@ export default function CartPage() {
 
   if (!mounted) return null;
 
-  // Если пустая — отдаем первый изолированный компонент
   if (items.length === 0) return <CartEmpty />;
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-white py-12 px-4 sm:px-6 selection:bg-zinc-950 selection:text-white">
       <div className="max-w-5xl mx-auto">
-        {/* Ссылка назад: тонкая графика, мелкий шрифт */}
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-950 transition-colors mb-8"
@@ -33,7 +31,6 @@ export default function CartPage() {
           <span>Назад в каталог</span>
         </Link>
 
-        {/* Заголовок страницы: строгий, тонкий, в верхнем регистре */}
         <h1 className="text-xl font-normal text-zinc-950 tracking-tight uppercase mb-10">
           Спецификация /{" "}
           <span className="text-zinc-400 font-light lowercase">
@@ -41,14 +38,11 @@ export default function CartPage() {
           </span>
         </h1>
 
-        {/* Геометрическая сетка без лишних отступов */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* Левая часть: список товаров (компоненты уже внутри завернуты в сетку) */}
           <div className="lg:col-span-2">
             <CartItemList />
           </div>
 
-          {/* Правая часть: форма и чек */}
           <OrderForm />
         </div>
       </div>

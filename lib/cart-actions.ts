@@ -19,7 +19,6 @@ export async function mergeCartWithDb(localItems: LocalItem[]) {
     if (!userId) {
       return { success: false, error: "Пользователь не авторизован" };
     }
-    // 1. Ищем или создаем корзину пользователя в БД
     let dbCart = await prisma.cart.findUnique({
       where: { userId },
       include: { items: true },
@@ -32,20 +31,17 @@ export async function mergeCartWithDb(localItems: LocalItem[]) {
       });
     }
 
-    // 2. Логика слияния
     for (const localItem of localItems) {
       const existingDbItem = dbCart.items.find(
         (item) => item.productId === localItem.id,
       );
 
       if (existingDbItem) {
-        // Если товар есть и в БД, и на клиенте — берем максимальное количество или складываем (выберем сложение)
         await prisma.dbCartItem.update({
           where: { id: existingDbItem.id },
           data: { quantity: existingDbItem.quantity + localItem.quantity },
         });
       } else {
-        // Если товара в БД не было — создаем запись
         await prisma.dbCartItem.create({
           data: {
             cartId: dbCart.id,
@@ -56,7 +52,6 @@ export async function mergeCartWithDb(localItems: LocalItem[]) {
       }
     }
 
-    // 3. Вытаскиваем финальную объединенную корзину со всеми данными продуктов
     const updatedCart = await prisma.cart.findUnique({
       where: { userId },
       include: {
@@ -66,7 +61,6 @@ export async function mergeCartWithDb(localItems: LocalItem[]) {
       },
     });
 
-    // Форматируем под структуру нашего фронтенд-Zustand стора
     const formattedItems =
       updatedCart?.items.map((item) => ({
         id: item.product.id,
@@ -89,11 +83,9 @@ export async function dbUpdateCartItem(productId: string, quantity: number) {
     const userId = session?.user?.id;
     if (!userId) return { success: false };
 
-    // Ищем корзину
     const cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) return { success: false };
 
-    // Обновляем количество или создаем запись, если её не было (метод upsert)
     await prisma.dbCartItem.upsert({
       where: {
         cartId_productId: { cartId: cart.id, productId },
@@ -118,7 +110,6 @@ export async function dbRemoveCartItem(productId: string) {
     const cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) return { success: false };
 
-    // Удаляем конкретный товар из корзины юзера
     await prisma.dbCartItem.deleteMany({
       where: { cartId: cart.id, productId },
     });
@@ -139,7 +130,6 @@ export async function dbClearCart() {
     const cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) return { success: false };
 
-    // Жестко сносим все товары, привязанные к этой корзине в БД
     await prisma.dbCartItem.deleteMany({
       where: { cartId: cart.id },
     });
@@ -240,7 +230,6 @@ export async function getDbOrders() {
 
 export async function dbDeleteOrder(orderId: string) {
   try {
-    // 1. Проверяем сессию пользователя прямо на сервере
     const session = await auth.api.getSession({ headers: await headers() });
     const userId = session?.user?.id;
 
@@ -248,7 +237,6 @@ export async function dbDeleteOrder(orderId: string) {
       return { success: false, error: "Пользователь не авторизован" };
     }
 
-    // 2. Ищем заказ и проверяем, что он принадлежит этому юзеру и НЕ оплачен
     const order = await prisma.order.findUnique({
       where: { id: orderId },
     });
@@ -265,7 +253,6 @@ export async function dbDeleteOrder(orderId: string) {
       return { success: false, error: "Нельзя удалить уже оплаченный заказ" };
     }
 
-    // 3. Удаляем заказ из базы данных Prisma (связанные OrderItem удалятся автоматически благодаря onDelete: Cascade)
     await prisma.order.delete({
       where: { id: orderId },
     });

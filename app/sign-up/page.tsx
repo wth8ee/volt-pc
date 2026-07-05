@@ -49,7 +49,6 @@ export default function SignUpPage() {
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center p-4 selection:bg-zinc-950 selection:text-white relative">
-      {/* Кнопка назад: тонкий мелкий шрифт */}
       <div className="w-full max-w-sm mb-6">
         <Link
           href="/"
@@ -60,9 +59,7 @@ export default function SignUpPage() {
         </Link>
       </div>
 
-      {/* Контейнер строгой прямоугольной формы */}
       <div className="w-full max-w-sm bg-white border border-zinc-200 rounded-none p-6 md:p-8">
-        {/* Заголовок */}
         <div className="flex flex-col items-center text-center mb-8">
           <div className="h-10 w-10 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-950 mb-3">
             <UserPlus className="h-4 w-4 stroke-[1.5]" />
@@ -76,7 +73,6 @@ export default function SignUpPage() {
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
-          {/* Поле: Имя */}
           <div className="space-y-1.5">
             <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
               Имя
@@ -94,7 +90,6 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          {/* Поле: Email */}
           <div className="space-y-1.5">
             <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
               Email
@@ -112,7 +107,6 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          {/* Поле: Пароль */}
           <div className="space-y-1.5">
             <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
               Пароль
@@ -130,14 +124,12 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          {/* Вывод ошибок Better Auth */}
           {error && (
             <div className="p-3 rounded-none bg-zinc-50 border border-zinc-200 text-red-600 text-[11px] font-bold text-center">
               {error}
             </div>
           )}
 
-          {/* Кнопка регистрации — брутальная черная плита */}
           <button
             type="submit"
             disabled={loading}
@@ -154,11 +146,10 @@ export default function SignUpPage() {
           </button>
         </form>
 
-        {/* Ссылка на авторизацию */}
         <div className="text-center mt-6 pt-4 border-t border-zinc-200 text-xs font-semibold text-zinc-400">
           Уже есть аккаунт?{" "}
           <Link
-            href="/sign-in" // Ведёт на твою страницу входа
+            href="/sign-in"
             className="text-zinc-950 hover:text-zinc-600 font-bold transition-colors underline underline-offset-2"
           >
             Войти

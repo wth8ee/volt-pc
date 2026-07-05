@@ -8,7 +8,6 @@ export async function POST(req: Request) {
   try {
     const { name, email, items, totalAmount } = await req.json();
 
-    // Валидация: теперь проверяем имя, почту и наличие товаров
     if (!items || items.length === 0 || !name || !email) {
       return NextResponse.json(
         { error: "Данные заказа неполные" },
@@ -16,7 +15,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. Пытаемся вытащить ID юзера из серверной сессии
     let userId: string | null = null;
     try {
       const session = await auth.api.getSession({ headers: await headers() });
@@ -25,14 +23,13 @@ export async function POST(req: Request) {
       userId = null;
     }
 
-    // 2. Создаем черновик заказа в базе данных Prisma
     const order = await prisma.order.create({
       data: {
         totalAmount: totalAmount,
         customerName: name,
-        customerEmail: email, // Обязательная почта
-        status: "PENDING", // Ожидает оплаты
-        userId: userId, // Привяжется к аккаунту или останется null для гостей
+        customerEmail: email,
+        status: "PENDING",
+        userId: userId,
         items: {
           create: items.map((item: any) => ({
             productId: item.id,
@@ -43,7 +40,6 @@ export async function POST(req: Request) {
       },
     });
 
-    // 3. Берем тестовые ключи ЮKassa из .env
     const SHOP_ID = process.env.YOOKASSA_SHOP_ID;
     const SECRET_KEY = process.env.YOOKASSA_SECRET_KEY;
 
@@ -57,7 +53,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 4. Формируем тело запроса к ЮKassa
     const origin = req.headers.get("origin") || "http://localhost:3000";
 
     const paymentData = {
@@ -72,7 +67,7 @@ export async function POST(req: Request) {
       },
       description: `Оплата заказа №${order.id.slice(0, 8)} в VoltPC`,
       metadata: {
-        orderId: order.id, // Зашиваем ID заказа для вебхука
+        orderId: order.id,
       },
     };
 
@@ -80,7 +75,6 @@ export async function POST(req: Request) {
       "base64",
     );
 
-    // Отправляем запрос на сервера ЮKassa с ключом идемпотентности
     const response = await fetch("https://api.yookassa.ru/v3/payments", {
       method: "POST",
       headers: {
@@ -102,13 +96,11 @@ export async function POST(req: Request) {
 
     const payment = await response.json();
 
-    // 5. Записываем в заказ уникальный paymentId, который выдала ЮKassa
     await prisma.order.update({
       where: { id: order.id },
       data: { paymentId: payment.id },
     });
 
-    // 6. Возвращаем фронтенду готовую ссылку на оплату
     return NextResponse.json({
       success: true,
       confirmationUrl: payment.confirmation.confirmation_url,

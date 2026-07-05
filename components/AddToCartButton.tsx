@@ -17,7 +17,6 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const { items, addItem, updateQuantity, removeItem } = useCart();
   const [mounted, setMounted] = useState(false);
 
-  // Избегаем ошибок гидратации Next.js при чтении LocalStorage
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -28,7 +27,6 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
     );
   }
 
-  // Ищем, добавлен ли этот конкретный девайс в корзину
   const cartItem = items.find((item) => item.id === product.id);
 
   const handleAddFirst = () => {
@@ -40,11 +38,9 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
     });
   };
 
-  // ЕСЛИ ТОВАР УЖЕ В КОРЗИНЕ: Показываем продвинутый счётчик
   if (cartItem) {
     return (
       <div className="h-9 inline-flex items-center border border-zinc-950 rounded-none bg-white overflow-hidden text-zinc-950 select-none animate-in fade-in duration-100">
-        {/* Кнопка минус или удалить */}
         {cartItem.quantity === 1 ? (
           <button
             onClick={() => removeItem(product.id)}
@@ -62,12 +58,10 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
           </button>
         )}
 
-        {/* Цифра количества */}
         <span className="w-8 text-center text-xs font-mono font-bold tracking-tight text-zinc-950 bg-white">
           {cartItem.quantity}
         </span>
 
-        {/* Кнопка плюс */}
         <button
           onClick={() => updateQuantity(product.id, cartItem.quantity + 1)}
           className="h-full w-9 hover:bg-zinc-50 flex items-center justify-center border-l border-zinc-200 text-zinc-500 hover:text-zinc-950 transition-colors cursor-pointer outline-none"
@@ -78,7 +72,6 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
     );
   }
 
-  // ЕСЛИ ТОВАРА НЕТ В КОРЗИНЕ: Показываем дефолтную кнопку «Купить»
   return (
     <button
       onClick={handleAddFirst}

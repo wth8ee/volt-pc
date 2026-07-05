@@ -1,13 +1,11 @@
 import { prisma } from "@/lib/prisma";
 
 async function main() {
-  // Очищаем старые данные
   await prisma.orderItem.deleteMany({});
   await prisma.order.deleteMany({});
   await prisma.product.deleteMany({});
   await prisma.category.deleteMany({});
 
-  // 1. Создаем 4 категории комплектующих
   const gpus = await prisma.category.create({
     data: { name: "Видеокарты", slug: "gpus" },
   });
@@ -24,10 +22,8 @@ async function main() {
     data: { name: "Материнские платы", slug: "motherboards" },
   });
 
-  // 2. Заливаем массив из 21 топового товара от ведущих брендов
   await prisma.product.createMany({
     data: [
-      // ================= ВИДЕОКАРТЫ =================
       {
         name: "ASUS ROG Strix GeForce RTX 4070 Ti SUPER",
         description:
@@ -84,7 +80,6 @@ async function main() {
         features: { chip: "NVIDIA", vram: "24 ГБ", type: "GDDR6X" },
       },
 
-      // ================= ПРОЦЕССОРЫ =================
       {
         name: "Intel Core i7-14700K OEM",
         description:
@@ -141,7 +136,6 @@ async function main() {
         features: { socket: "LGA1700", cores: "24", threads: "32" },
       },
 
-      // ================= ОПЕРАТИВНАЯ ПАМЯТЬ =================
       {
         name: "Kingston FURY Beast DDR5 32GB (2x16GB) 6000MHz",
         description:
@@ -198,7 +192,6 @@ async function main() {
         features: { type: "DDR5", capacity: "32 ГБ", speed: "7200 МГц" },
       },
 
-      // ================= МАТЕРИНСКИЕ ПЛАТЫ =================
       {
         name: "ASUS ROG STRIX Z790-E GAMING WIFI",
         description:

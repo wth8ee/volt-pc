@@ -26,14 +26,11 @@ interface CartState {
 }
 
 export const useCart = create<CartState>()(
-  // Middleware persist автоматически сохранит корзину в LocalStorage!
-  // Если юзер обновит страницу, товары из корзины не пропадут.
   persist(
     (set, get) => ({
       items: [],
 
       addItem: async (item) => {
-        // 1. Сначала мгновенно обновляем UI на фронтенде для плавности
         const currentItems = get().items;
         const existingItem = currentItems.find((i) => i.id === item.id);
         let newQuantity = 1;

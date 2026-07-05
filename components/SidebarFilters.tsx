@@ -33,7 +33,6 @@ export default function SidebarFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Храним выбранные фильтры в локальном стейте, чтобы не менять URL раньше времени
   const [category, setCategory] = useState(searchParams.get("category") || "");
   const [selectedBrands, setSelectedBrands] = useState<string[]>(
     searchParams.get("brand") ? searchParams.get("brand")!.split(",") : [],
@@ -44,7 +43,6 @@ export default function SidebarFilters() {
     searchParams.get("inStock") === "true",
   );
 
-  // Синхронизируем локальный стейт, если URL сбросили снаружи
   useEffect(() => {
     setCategory(searchParams.get("category") || "");
     setSelectedBrands(
@@ -55,7 +53,6 @@ export default function SidebarFilters() {
     setInStock(searchParams.get("inStock") === "true");
   }, [searchParams]);
 
-  // Сборка всех фильтров в URL по клику на кнопку
   const handleApply = () => {
     const params = new URLSearchParams();
     if (category) params.set("category", category);
@@ -70,11 +67,10 @@ export default function SidebarFilters() {
   };
 
   const handleBrandChange = (brandName: string) => {
-    setSelectedBrands(
-      (prev) =>
-        prev.includes(brandName)
-          ? prev.filter((b) => b !== brandName) // Удаляем, если галочка уже стояла
-          : [...prev, brandName], // Добавляем, если галочки не было
+    setSelectedBrands((prev) =>
+      prev.includes(brandName)
+        ? prev.filter((b) => b !== brandName)
+        : [...prev, brandName],
     );
   };
 
@@ -89,7 +85,6 @@ export default function SidebarFilters() {
 
   return (
     <Sidebar className="border-r border-zinc-200 bg-white text-zinc-900 pt-16">
-      {/* Шапка сайдбара: чистый белый фон, тонкая рамка */}
       <SidebarHeader className="border-b border-zinc-200 bg-white p-4 flex flex-row items-center justify-between">
         <div className="flex items-center gap-3 font-medium text-xs uppercase tracking-wider text-zinc-950">
           <SlidersHorizontal className="h-3.5 w-3.5 text-zinc-950 stroke-[1.5]" />
@@ -105,10 +100,8 @@ export default function SidebarFilters() {
         </button>
       </SidebarHeader>
 
-      {/* Контентная зона */}
       <SidebarContent className="p-4 space-y-6 flex flex-col justify-between h-full bg-white">
         <div className="space-y-6">
-          {/* Группа 1: Категории (Кнопки стали плоскими плитками встык) */}
           <SidebarGroup className="p-0">
             <SidebarGroupLabel className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">
               Категория
@@ -133,7 +126,6 @@ export default function SidebarFilters() {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          {/* Группа 2: Цена (Инпуты стали строгими белыми прямоугольниками) */}
           <SidebarGroup className="p-0">
             <SidebarGroupLabel className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">
               Цена, ₽
@@ -157,7 +149,6 @@ export default function SidebarFilters() {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          {/* Группа 3: Бренды (Кастомные строгие чекбоксы-квадраты) */}
           <SidebarGroup className="p-0">
             <SidebarGroupLabel className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">
               Бренд
@@ -193,7 +184,6 @@ export default function SidebarFilters() {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          {/* Группа 4: Статус */}
           <SidebarGroup className="p-0 pt-2">
             <SidebarGroupContentPrefix>
               <button
@@ -217,7 +207,6 @@ export default function SidebarFilters() {
           </SidebarGroup>
         </div>
 
-        {/* Подвал с прямоугольными кнопками без фиолетовых теней */}
         <div className="pt-4 border-t border-zinc-200 mt-auto flex items-center gap-2">
           <button
             onClick={handleReset}
@@ -238,7 +227,6 @@ export default function SidebarFilters() {
   );
 }
 
-// Заглушка, чтобы не ломать типы shadcn, если структура строгая
 function SidebarGroupContentPrefix({
   children,
 }: {

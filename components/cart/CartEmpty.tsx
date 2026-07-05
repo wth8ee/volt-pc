@@ -34,7 +34,6 @@ export default function CartEmpty() {
     }
   }, [isSuccess, orderId]);
 
-  // СЦЕНАРИЙ 1: Идет загрузка деталей заказа из БД
   if (loading) {
     return (
       <div className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center text-center p-4">
@@ -46,11 +45,9 @@ export default function CartEmpty() {
     );
   }
 
-  // СЦЕНАРИЙ 2: ЭКРАН УСПЕШНОЙ ОПЛАТЫ (Строгий монохромный чек)
   if (isSuccess && orderData) {
     return (
       <main className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center py-16 px-4 selection:bg-zinc-950 selection:text-white">
-        {/* Индикатор успеха без овалов и теней */}
         <div className="h-12 w-12 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-950 mb-4">
           <CheckCircle2 className="h-5 w-5 stroke-[1.5]" />
         </div>
@@ -63,7 +60,6 @@ export default function CartEmpty() {
           Специалисты VoltPC приступили к сборке и тестированию компонентов.
         </p>
 
-        {/* Строгий прямоугольный бланк деталей */}
         <div className="w-full max-w-xl bg-white border border-zinc-200 rounded-none p-6 space-y-6 text-left">
           {/* Параметры спецификации */}
           <div className="grid grid-cols-2 gap-4 pb-5 border-b border-zinc-200 text-xs font-medium text-zinc-500">
@@ -99,7 +95,6 @@ export default function CartEmpty() {
             </div>
           </div>
 
-          {/* Список оплаченных комплектующих встык */}
           <div className="space-y-2">
             <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest block mb-2">
               Спецификация компонентов
@@ -136,7 +131,6 @@ export default function CartEmpty() {
             </div>
           </div>
 
-          {/* Итоговый футер бланка */}
           <div className="pt-4 border-t border-zinc-200 flex items-center justify-between">
             <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
               Итоговая стоимость:
@@ -147,7 +141,6 @@ export default function CartEmpty() {
           </div>
         </div>
 
-        {/* Кнопка возврата — строгая черная плитка */}
         <Link
           href="/"
           className="mt-10 px-6 py-3.5 bg-zinc-950 hover:bg-zinc-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-colors active:scale-[0.98] cursor-pointer"
@@ -158,7 +151,6 @@ export default function CartEmpty() {
     );
   }
 
-  // СЦЕНАРИЙ 3: ДЕФОЛТНАЯ ПУСТАЯ КОРЗИНА (Если параметров в URL нет)
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center text-center p-4">
       <div className="h-12 w-12 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-400 mb-4">

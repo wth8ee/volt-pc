@@ -12,7 +12,6 @@ import {
 import DeleteOrderButton from "@/components/order/DeleteOrderButton";
 
 export default async function OrdersPage() {
-  // Вызываем Server Action напрямую при рендере страницы на сервере
   const res = await getDbOrders();
 
   if (!res.success) {
@@ -29,7 +28,7 @@ export default async function OrdersPage() {
           документов и оплаченных спецификаций.
         </p>
         <Link
-          href="/sign-in" // Изменили путь под нашу единую страницу входа
+          href="/sign-in"
           className="px-5 py-3 bg-zinc-950 hover:bg-zinc-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-colors active:scale-[0.98]"
         >
           Войти в профиль
@@ -40,7 +39,6 @@ export default async function OrdersPage() {
 
   const orders = res.orders || [];
 
-  // СЦЕНАРИЙ 2: ПУСТОЙ СПИСОК (Заказов в БД нет)
   if (orders.length === 0) {
     return (
       <main className="min-h-[calc(100vh-4rem)] bg-white text-zinc-950 flex flex-col items-center justify-center text-center p-4 selection:bg-zinc-950 selection:text-white">
@@ -65,10 +63,8 @@ export default async function OrdersPage() {
   }
 
   return (
-    // 🔥 Изменили фон всей страницы на легкий серый bg-zinc-50 для контраста
     <main className="min-h-[calc(100vh-4rem)] bg-zinc-50 py-12 px-4 sm:px-6 selection:bg-zinc-950 selection:text-white">
       <div className="max-w-4xl mx-auto">
-        {/* Ссылка возврата */}
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-950 transition-colors mb-8"
@@ -77,7 +73,6 @@ export default async function OrdersPage() {
           <span>Назад в каталог</span>
         </Link>
 
-        {/* Строгие заголовки */}
         <h1 className="text-xl font-normal text-zinc-950 tracking-tight uppercase mb-2">
           Профиль /{" "}
           <span className="text-zinc-400 font-light lowercase">
@@ -89,24 +84,20 @@ export default async function OrdersPage() {
           документов.
         </p>
 
-        {/* 🔥 Список бланков больше не склеен! Заменили на space-y-8 для разделения папок */}
         <div className="space-y-8">
           {orders.map((order: any) => {
             const isPaid = order.status === "SUCCEEDED";
             return (
               <div
                 key={order.id}
-                // 🔥 Каждая карточка теперь — это независимый белый прямоугольник в рамочке
                 className="bg-white border border-zinc-200 p-6 md:p-8 space-y-6 hover:shadow-sm transition-all duration-200 relative overflow-hidden"
               >
-                {/* Левый строгий маркер статуса */}
                 <div
                   className={`absolute top-0 left-0 w-1.5 h-full transition-colors ${
                     isPaid ? "bg-zinc-950" : "bg-zinc-300"
                   }`}
                 />
 
-                {/* Шапка бланка: номер, дата, статус */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 text-xs font-medium text-zinc-500">
                   <div className="space-y-1">
                     <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
@@ -135,7 +126,6 @@ export default async function OrdersPage() {
                       <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
                         Текущий статус
                       </span>
-                      {/* 🔥 Полностью переделали индикаторы статусов для жесткого контраста */}
                       {isPaid ? (
                         <span className="inline-flex items-center text-white font-black text-[9px] uppercase tracking-widest bg-zinc-950 px-3 py-1 rounded-none">
                           Оплачен
@@ -149,9 +139,7 @@ export default async function OrdersPage() {
                   </div>
                 </div>
 
-                {/* Содержимое комплектующих внутри бланка */}
                 <div className="space-y-2.5 py-1">
-                  {/* 🔥 Оставили внутренние линии только между товарами */}
                   <div className="border-t border-l border-zinc-200">
                     {order.items.map((item: any) => (
                       <div
@@ -187,7 +175,6 @@ export default async function OrdersPage() {
                   </div>
                 </div>
 
-                {/* Нижня часть бланка: Итог и действия */}
                 <div className="pt-3 border-t border-zinc-200 flex items-center justify-between">
                   <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">
                     Итоговая стоимость спецификации:
