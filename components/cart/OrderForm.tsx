@@ -57,21 +57,21 @@ export default function OrderForm() {
   };
 
   return (
-    <div className="bg-zinc-900/20 border border-zinc-900 rounded-3xl p-5 md:p-6 sticky top-24">
-      <h3 className="text-base font-black text-white tracking-tight mb-4 pb-3 border-b border-zinc-900">
+    <div className="bg-white border border-zinc-200 rounded-none p-6 sticky top-24 select-none">
+      <h3 className="text-sm font-bold text-zinc-950 uppercase tracking-wider mb-4 pb-3 border-b border-zinc-200">
         Ваш чек визита
       </h3>
 
-      <div className="space-y-2 pb-4 border-b border-zinc-900 text-xs font-semibold text-zinc-500">
+      <div className="space-y-2.5 pb-4 border-b border-zinc-200 text-xs font-medium text-zinc-500">
         <div className="flex justify-between">
           <span>Товары в корзине</span>
-          <span className="text-zinc-300 font-mono">
+          <span className="text-zinc-950 font-mono font-bold">
             {items.reduce((acc, i) => acc + i.quantity, 0)} шт.
           </span>
         </div>
         <div className="flex justify-between">
           <span>Доставка VoltExpress</span>
-          <span className="text-emerald-500 uppercase font-bold tracking-wider">
+          <span className="text-zinc-950 uppercase font-black tracking-widest text-[10px]">
             Бесплатно
           </span>
         </div>
@@ -79,16 +79,17 @@ export default function OrderForm() {
 
       <div className="flex items-center justify-between my-5">
         <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
-          Итого к оплате:
+          Сумма заказа:
         </span>
-        <span className="text-lg md:text-xl font-black text-white font-mono tracking-tight">
+        <span className="text-base sm:text-lg font-bold text-zinc-950 font-mono tracking-tight">
           {getTotalPrice().toLocaleString("ru-RU")} ₽
         </span>
       </div>
 
       <form onSubmit={handleCheckout} className="space-y-4 mt-6">
+        {/* Поле: Имя */}
         <div className="space-y-1.5">
-          <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">
+          <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
             Ваше имя
           </label>
           <input
@@ -97,12 +98,13 @@ export default function OrderForm() {
             placeholder="Алексей"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl px-3.5 py-3 text-xs text-white focus:outline-none focus:border-purple-500/50 transition-colors"
+            className="w-full bg-white border border-zinc-200 rounded-none px-3.5 py-2.5 text-xs text-zinc-950 placeholder-zinc-300 focus:outline-none focus:border-zinc-950 transition-colors"
           />
         </div>
 
+        {/* Поле: Email */}
         <div className="space-y-1.5">
-          <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">
+          <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
             Email для чека
           </label>
           <input
@@ -111,30 +113,31 @@ export default function OrderForm() {
             placeholder="alex@voltpc.ru"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl px-3.5 py-3 text-xs text-white focus:outline-none focus:border-purple-500/50 transition-colors"
+            className="w-full bg-white border border-zinc-200 rounded-none px-3.5 py-2.5 text-xs text-zinc-950 placeholder-zinc-300 focus:outline-none focus:border-zinc-950 transition-colors"
           />
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-red-550/10 border border-red-500/20 text-red-400 text-[11px] font-bold text-center">
+          <div className="p-3 rounded-none bg-zinc-50 border border-zinc-200 text-red-600 text-[11px] font-bold text-center">
             {error}
           </div>
         )}
 
+        {/* Кнопка оплаты — брутальный прямоугольник */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-4 py-3.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-600/10 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+          className="w-full mt-4 py-3.5 bg-zinc-950 hover:bg-zinc-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 active:scale-[0.98]"
         >
           {loading ? (
             <>
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-white" />
               <span>Генерация шлюза...</span>
             </>
           ) : (
             <>
-              <CreditCard className="h-3.5 w-3.5" />
-              <span>Оплатить картой / СБП</span>
+              <CreditCard className="h-3.5 w-3.5 stroke-[1.8]" />
+              <span>Оплатить заказ</span>
             </>
           )}
         </button>

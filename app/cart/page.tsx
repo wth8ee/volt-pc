@@ -22,22 +22,28 @@ export default function CartPage() {
   if (items.length === 0) return <CartEmpty />;
 
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-zinc-950 py-10 px-4 sm:px-6 selection:bg-purple-500/20">
+    <main className="min-h-[calc(100vh-4rem)] bg-white py-12 px-4 sm:px-6 selection:bg-zinc-950 selection:text-white">
       <div className="max-w-5xl mx-auto">
+        {/* Ссылка назад: тонкая графика, мелкий шрифт */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-bold text-zinc-500 hover:text-white transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-950 transition-colors mb-8"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Вернуться в каталог железа
+          <ArrowLeft className="h-3 w-3 stroke-[2]" />
+          <span>Назад в каталог</span>
         </Link>
 
-        <h1 className="text-2xl font-black text-white tracking-tight mb-8">
-          Оформление заказа
+        {/* Заголовок страницы: строгий, тонкий, в верхнем регистре */}
+        <h1 className="text-xl font-normal text-zinc-950 tracking-tight uppercase mb-10">
+          Спецификация /{" "}
+          <span className="text-zinc-400 font-light lowercase">
+            оформление заказа
+          </span>
         </h1>
 
+        {/* Геометрическая сетка без лишних отступов */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* Левая часть: список товаров */}
+          {/* Левая часть: список товаров (компоненты уже внутри завернуты в сетку) */}
           <div className="lg:col-span-2">
             <CartItemList />
           </div>

@@ -47,7 +47,7 @@ export default async function RootLayout({
           inter.variable,
         )}
       >
-        <body className="min-h-full flex flex-col">
+        <body className="min-h-full flex flex-col bg-white text-zinc-950">
           <Navbar />
           {children}
         </body>

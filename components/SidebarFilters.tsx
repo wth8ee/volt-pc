@@ -88,51 +88,54 @@ export default function SidebarFilters() {
   };
 
   return (
-    <Sidebar className="border-r border-zinc-900 bg-zinc-950 text-zinc-200 pt-16">
-      <SidebarHeader className="border-b border-zinc-900 bg-zinc-950 p-4 flex flex-row items-center justify-between">
-        <div className="flex items-center gap-4 font-bold text-sm text-white">
-          <SlidersHorizontal className="h-4 w-4 text-purple-500" />
-          <span>Фильтры железа</span>
+    <Sidebar className="border-r border-zinc-200 bg-white text-zinc-900 pt-16">
+      {/* Шапка сайдбара: чистый белый фон, тонкая рамка */}
+      <SidebarHeader className="border-b border-zinc-200 bg-white p-4 flex flex-row items-center justify-between">
+        <div className="flex items-center gap-3 font-medium text-xs uppercase tracking-wider text-zinc-950">
+          <SlidersHorizontal className="h-3.5 w-3.5 text-zinc-950 stroke-[1.5]" />
+          <span>Фильтры</span>
         </div>
         <button
           onClick={handleReset}
-          className="text-zinc-500 hover:text-red-400 p-1 rounded-lg hover:bg-zinc-900 transition-all cursor-pointer flex items-center gap-1 text-xs font-bold"
+          className="text-zinc-400 hover:text-zinc-950 py-1 px-2 rounded-none transition-colors cursor-pointer flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider"
           title="Сбросить фильтры"
         >
-          <RotateCcw className="h-3.5 w-3.5" />
+          <RotateCcw className="h-3 w-3" />
           <span>Сбросить</span>
         </button>
       </SidebarHeader>
 
-      <SidebarContent className="p-4 space-y-6 flex flex-col justify-between h-full bg-zinc-950">
+      {/* Контентная зона */}
+      <SidebarContent className="p-4 space-y-6 flex flex-col justify-between h-full bg-white">
         <div className="space-y-6">
-          {/* Группа 1: Категории */}
+          {/* Группа 1: Категории (Кнопки стали плоскими плитками встык) */}
           <SidebarGroup className="p-0">
-            <SidebarGroupLabel className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">
+            <SidebarGroupLabel className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">
               Категория
             </SidebarGroupLabel>
-            <SidebarGroupContent className="space-y-2">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.slug}
-                  onClick={() =>
-                    setCategory(category === cat.slug ? "" : cat.slug)
-                  }
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer block border ${
-                    category === cat.slug
-                      ? "bg-purple-600/10 border-purple-500/40 text-purple-400"
-                      : "bg-zinc-900/30 border-zinc-900 hover:border-zinc-800 text-zinc-400 hover:text-zinc-200"
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              ))}
+            <SidebarGroupContent className="space-y-1">
+              {CATEGORIES.map((cat) => {
+                const isSelected = category === cat.slug;
+                return (
+                  <button
+                    key={cat.slug}
+                    onClick={() => setCategory(isSelected ? "" : cat.slug)}
+                    className={`w-full text-left px-3 py-2 rounded-none text-xs font-medium transition-colors cursor-pointer block border ${
+                      isSelected
+                        ? "bg-zinc-950 border-zinc-950 text-white font-bold"
+                        : "bg-white border-transparent hover:bg-zinc-50 text-zinc-500 hover:text-zinc-900"
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                );
+              })}
             </SidebarGroupContent>
           </SidebarGroup>
 
-          {/* Группа 2: Цена (Скрыли стрелочки через [appearance:textfield]) */}
+          {/* Группа 2: Цена (Инпуты стали строгими белыми прямоугольниками) */}
           <SidebarGroup className="p-0">
-            <SidebarGroupLabel className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">
+            <SidebarGroupLabel className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">
               Цена, ₽
             </SidebarGroupLabel>
             <SidebarGroupContent className="flex items-center gap-2">
@@ -141,43 +144,49 @@ export default function SidebarFilters() {
                 placeholder="От"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                className="w-full bg-zinc-900 border border-zinc-900 rounded-xl px-3 py-2 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-purple-500/50 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full bg-white border border-zinc-200 rounded-none px-3 py-2 text-xs text-zinc-950 placeholder-zinc-300 focus:outline-none focus:border-zinc-950 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
-              <span className="text-zinc-700 text-xs">—</span>
+              <span className="text-zinc-300 text-xs">—</span>
               <input
                 type="number"
                 placeholder="До"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="w-full bg-zinc-900 border border-zinc-900 rounded-xl px-3 py-2 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-purple-500/50 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full bg-white border border-zinc-200 rounded-none px-3 py-2 text-xs text-zinc-950 placeholder-zinc-300 focus:outline-none focus:border-zinc-950 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </SidebarGroupContent>
           </SidebarGroup>
 
-          {/* Группа 3: Бренды (Кастомные стильные чекбоксы) */}
+          {/* Группа 3: Бренды (Кастомные строгие чекбоксы-квадраты) */}
           <SidebarGroup className="p-0">
-            <SidebarGroupLabel className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">
+            <SidebarGroupLabel className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">
               Бренд
             </SidebarGroupLabel>
-            <SidebarGroupContent className="space-y-3">
+            <SidebarGroupContent className="space-y-2.5">
               {BRENDS.map((b) => {
-                const isChecked = selectedBrands.includes(b); // 🔥 Проверяем вхождение в массив
+                const isChecked = selectedBrands.includes(b);
                 return (
                   <button
                     key={b}
                     onClick={() => handleBrandChange(b)}
-                    className="flex items-center gap-3 w-full text-left cursor-pointer group text-xs font-semibold text-zinc-400 hover:text-zinc-200 transition-colors"
+                    className="flex items-center gap-3 w-full text-left cursor-pointer group text-xs font-medium text-zinc-500 hover:text-zinc-950 transition-colors"
                   >
                     <div
-                      className={`h-4 w-4 rounded-md border flex items-center justify-center transition-all ${
+                      className={`h-3.5 w-3.5 rounded-none border flex items-center justify-center transition-colors ${
                         isChecked
-                          ? "bg-purple-600 border-purple-500 text-white"
-                          : "border-zinc-800 bg-zinc-900 group-hover:border-zinc-700"
+                          ? "bg-zinc-950 border-zinc-950 text-white"
+                          : "border-zinc-200 bg-white group-hover:border-zinc-400"
                       }`}
                     >
-                      {isChecked && <Check className="h-2.5 w-2.5" />}
+                      {isChecked && (
+                        <Check className="h-2.5 w-2.5 stroke-[3]" />
+                      )}
                     </div>
-                    <span>{b}</span>
+                    <span
+                      className={isChecked ? "text-zinc-950 font-bold" : ""}
+                    >
+                      {b}
+                    </span>
                   </button>
                 );
               })}
@@ -189,34 +198,37 @@ export default function SidebarFilters() {
             <SidebarGroupContentPrefix>
               <button
                 onClick={() => setInStock(!inStock)}
-                className="flex items-center gap-3 w-full text-left cursor-pointer group text-xs font-semibold text-zinc-400 hover:text-zinc-200 transition-colors"
+                className="flex items-center gap-3 w-full text-left cursor-pointer group text-xs font-medium text-zinc-500 hover:text-zinc-950 transition-colors"
               >
                 <div
-                  className={`h-4 w-4 rounded-md border flex items-center justify-center transition-all ${
+                  className={`h-3.5 w-3.5 rounded-none border flex items-center justify-center transition-colors ${
                     inStock
-                      ? "bg-purple-600 border-purple-500 text-white"
-                      : "border-zinc-800 bg-zinc-900 group-hover:border-zinc-700"
+                      ? "bg-zinc-950 border-zinc-950 text-white"
+                      : "border-zinc-200 bg-white group-hover:border-zinc-400"
                   }`}
                 >
-                  {inStock && <Check className="h-2.5 w-2.5 stroke-[4]" />}
+                  {inStock && <Check className="h-2.5 w-2.5 stroke-[3]" />}
                 </div>
-                <span>Только в наличии</span>
+                <span className={inStock ? "text-zinc-950 font-bold" : ""}>
+                  Только в наличии
+                </span>
               </button>
             </SidebarGroupContentPrefix>
           </SidebarGroup>
         </div>
 
-        <div className="pt-4 border-t border-zinc-900 mt-auto flex items-center gap-2">
+        {/* Подвал с прямоугольными кнопками без фиолетовых теней */}
+        <div className="pt-4 border-t border-zinc-200 mt-auto flex items-center gap-2">
           <button
             onClick={handleReset}
-            className="px-3 py-2.5 rounded-xl border border-zinc-900 bg-zinc-900/40 hover:bg-zinc-900 hover:border-zinc-800 text-zinc-400 hover:text-zinc-200 text-xs font-bold transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-1.5"
+            className="px-3 py-2.5 rounded-none border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 text-zinc-500 hover:text-zinc-950 text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
             title="Очистить все параметры"
           >
             <RotateCcw className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={handleApply}
-            className="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-md shadow-purple-600/10 active:scale-98 cursor-pointer text-center"
+            className="flex-1 py-2.5 rounded-none bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer text-center"
           >
             Применить
           </button>

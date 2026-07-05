@@ -9,6 +9,7 @@ import {
   Cpu,
   ShoppingBag,
 } from "lucide-react";
+import DeleteOrderButton from "@/components/order/DeleteOrderButton";
 
 export default async function OrdersPage() {
   // Вызываем Server Action напрямую при рендере страницы на сервере
@@ -16,18 +17,22 @@ export default async function OrdersPage() {
 
   if (!res.success) {
     return (
-      <main className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex flex-col items-center justify-center text-center p-4">
-        <ShieldAlert className="h-10 w-10 text-red-500 mb-4" />
-        <h2 className="text-xl font-black text-white mb-1">Доступ ограничен</h2>
-        <p className="text-xs text-zinc-500 max-w-xs mb-6 font-semibold">
-          Войдите в свой аккаунт VoltPC, чтобы просматривать историю ваших
-          заказов.
+      <main className="min-h-[calc(100vh-4rem)] bg-white text-zinc-950 flex flex-col items-center justify-center text-center p-4 selection:bg-zinc-950 selection:text-white">
+        <div className="h-12 w-12 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-950 mb-4">
+          <ShieldAlert className="h-5 w-5 stroke-[1.5]" />
+        </div>
+        <h2 className="text-base font-bold uppercase tracking-tight mb-1">
+          Доступ ограничен
+        </h2>
+        <p className="text-xs text-zinc-400 max-w-xs mb-8 font-normal leading-relaxed">
+          Пожалуйста, авторизуйтесь в вашем профиле для просмотра истории
+          документов и оплаченных спецификаций.
         </p>
         <Link
-          href="/login"
-          className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition-all shadow-md"
+          href="/sign-in" // Изменили путь под нашу единую страницу входа
+          className="px-5 py-3 bg-zinc-950 hover:bg-zinc-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-colors active:scale-[0.98]"
         >
-          Войти в аккаунт
+          Войти в профиль
         </Link>
       </main>
     );
@@ -35,22 +40,23 @@ export default async function OrdersPage() {
 
   const orders = res.orders || [];
 
+  // СЦЕНАРИЙ 2: ПУСТОЙ СПИСОК (Заказов в БД нет)
   if (orders.length === 0) {
     return (
-      <main className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex flex-col items-center justify-center text-center p-4">
-        <div className="h-12 w-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 mb-4 shadow-xl">
-          <ShoppingBag className="h-5 w-5" />
+      <main className="min-h-[calc(100vh-4rem)] bg-white text-zinc-950 flex flex-col items-center justify-center text-center p-4 selection:bg-zinc-950 selection:text-white">
+        <div className="h-12 w-12 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-400 mb-4">
+          <ShoppingBag className="h-4 w-4 stroke-[1.5]" />
         </div>
-        <h2 className="text-xl font-black text-white mb-1">
-          У вас пока нет заказов
+        <h2 className="text-base font-bold uppercase tracking-tight mb-1">
+          Архив документов пуст
         </h2>
-        <p className="text-xs text-zinc-500 max-w-xs mb-6 font-semibold">
-          Все собранные комплектующие и оплаченные заказы будут отображаться на
-          этой странице.
+        <p className="text-xs text-zinc-400 max-w-xs mb-8 font-normal leading-relaxed">
+          Все ваши сформированные спецификации и подтвержденные платежи будут
+          аккуратно каталогизированы на этой странице.
         </p>
         <Link
           href="/"
-          className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition-all shadow-md"
+          className="px-5 py-3 bg-zinc-950 hover:bg-zinc-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-colors active:scale-[0.98]"
         >
           Перейти в каталог
         </Link>
@@ -59,59 +65,64 @@ export default async function OrdersPage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-zinc-950 py-10 px-4 sm:px-6 selection:bg-purple-500/20">
+    // 🔥 Изменили фон всей страницы на легкий серый bg-zinc-50 для контраста
+    <main className="min-h-[calc(100vh-4rem)] bg-zinc-50 py-12 px-4 sm:px-6 selection:bg-zinc-950 selection:text-white">
       <div className="max-w-4xl mx-auto">
-        {/* Верхний возврат */}
+        {/* Ссылка возврата */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-bold text-zinc-500 hover:text-white transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-950 transition-colors mb-8"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Вернуться в каталог железа
+          <ArrowLeft className="h-3 w-3 stroke-[1.8]" />
+          <span>Назад в каталог</span>
         </Link>
 
-        <h1 className="text-2xl font-black text-white tracking-tight mb-2">
-          История ваших заказов
+        {/* Строгие заголовки */}
+        <h1 className="text-xl font-normal text-zinc-950 tracking-tight uppercase mb-2">
+          Профиль /{" "}
+          <span className="text-zinc-400 font-light lowercase">
+            история заказов
+          </span>
         </h1>
-        <p className="text-xs text-zinc-500 font-semibold mb-8">
-          Управляйте покупками, отслеживайте статус сборки и чеки ЮKassa.
+        <p className="text-xs text-zinc-400 font-normal mb-10">
+          Просмотр спецификаций, отслеживание этапов сборки и статусов
+          документов.
         </p>
 
-        {/* Список бланков заказов */}
-        <div className="space-y-6">
+        {/* 🔥 Список бланков больше не склеен! Заменили на space-y-8 для разделения папок */}
+        <div className="space-y-8">
           {orders.map((order: any) => {
             const isPaid = order.status === "SUCCEEDED";
             return (
               <div
                 key={order.id}
-                className="bg-zinc-900/10 border border-zinc-900 rounded-3xl p-5 md:p-6 space-y-4 hover:border-zinc-800/80 transition-all duration-300 relative overflow-hidden group"
+                // 🔥 Каждая карточка теперь — это независимый белый прямоугольник в рамочке
+                className="bg-white border border-zinc-200 p-6 md:p-8 space-y-6 hover:shadow-sm transition-all duration-200 relative overflow-hidden"
               >
-                {/* Индикатор статуса сбоку */}
+                {/* Левый строгий маркер статуса */}
                 <div
-                  className={`absolute top-0 left-0 w-1 h-full transition-colors ${
-                    isPaid
-                      ? "bg-emerald-500/40 group-hover:bg-emerald-500"
-                      : "bg-amber-500/40 group-hover:bg-amber-500"
+                  className={`absolute top-0 left-0 w-1.5 h-full transition-colors ${
+                    isPaid ? "bg-zinc-950" : "bg-zinc-300"
                   }`}
                 />
 
-                {/* Шапка заказа: номер, дата, статус */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-900/60 text-xs font-semibold text-zinc-400">
-                  <div className="space-y-0.5">
-                    <span className="text-[10px] uppercase font-black text-zinc-600 tracking-widest block">
-                      Номер заказа
+                {/* Шапка бланка: номер, дата, статус */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 text-xs font-medium text-zinc-500">
+                  <div className="space-y-1">
+                    <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
+                      Номер документа
                     </span>
-                    <span className="text-zinc-200 font-mono font-bold">
+                    <span className="text-zinc-950 font-mono font-bold text-sm">
                       #{order.id.slice(0, 8).toUpperCase()}
                     </span>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 sm:text-right">
-                    <div className="space-y-0.5">
-                      <span className="text-[10px] uppercase font-black text-zinc-600 tracking-widest block">
-                        Дата оформления
+                  <div className="flex flex-wrap items-center gap-x-8 gap-y-2 sm:text-right">
+                    <div className="space-y-1">
+                      <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
+                        Оформлен
                       </span>
-                      <span className="text-zinc-300 font-mono">
+                      <span className="text-zinc-900 font-mono">
                         {new Date(order.createdAt).toLocaleDateString("ru-RU", {
                           day: "numeric",
                           month: "short",
@@ -120,73 +131,82 @@ export default async function OrdersPage() {
                       </span>
                     </div>
 
-                    <div className="space-y-0.5 sm:text-right">
-                      <span className="text-[10px] uppercase font-black text-zinc-600 tracking-widest block">
-                        Статус
+                    <div className="space-y-1 sm:text-right">
+                      <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
+                        Текущий статус
                       </span>
+                      {/* 🔥 Полностью переделали индикаторы статусов для жесткого контраста */}
                       {isPaid ? (
-                        <span className="inline-flex items-center gap-1 text-emerald-400 font-extrabold text-[10px] uppercase tracking-wider bg-emerald-500/5 border border-emerald-500/20 px-2.5 py-0.5 rounded-md">
-                          <CheckCircle2 className="h-3 'w-3" /> Оплачен
+                        <span className="inline-flex items-center text-white font-black text-[9px] uppercase tracking-widest bg-zinc-950 px-3 py-1 rounded-none">
+                          Оплачен
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-amber-400 font-extrabold text-[10px] uppercase tracking-wider bg-amber-500/5 border border-amber-500/20 px-2.5 py-0.5 rounded-md">
-                          <Clock className="h-3 w-3" /> Ожидает оплаты
+                        <span className="inline-flex items-center text-zinc-500 font-bold text-[9px] uppercase tracking-widest bg-zinc-100 px-3 py-1 rounded-none border border-zinc-200/60">
+                          Ожидает оплаты
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
 
-                {/* Содержимое комплектующих внутри заказа */}
+                {/* Содержимое комплектующих внутри бланка */}
                 <div className="space-y-2.5 py-1">
-                  {order.items.map((item: any) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between gap-4 bg-zinc-900/30 border border-zinc-900/40 p-3 rounded-2xl"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-9 w-9 bg-white rounded-xl p-0.5 shrink-0 flex items-center justify-center border border-zinc-900 shadow-inner">
-                          <img
-                            src={item.product.images || "/gpu1.jpg"}
-                            alt={item.product.name}
-                            className="object-contain w-full h-full"
-                          />
+                  {/* 🔥 Оставили внутренние линии только между товарами */}
+                  <div className="border-t border-l border-zinc-200">
+                    {order.items.map((item: any) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between gap-4 bg-white border-r border-b border-zinc-200 p-3.5"
+                      >
+                        <div className="flex items-center gap-4 min-w-0">
+                          <div className="h-9 w-9 bg-white rounded-none p-0.5 shrink-0 flex items-center justify-center border border-zinc-100 mix-blend-multiply">
+                            <img
+                              src={
+                                item.product.images[0] || item.product.images
+                              }
+                              alt={item.product.name}
+                              className="object-contain w-full h-full"
+                            />
+                          </div>
+                          <div className="min-w-0">
+                            <h4 className="text-xs font-medium text-zinc-900 truncate pr-4">
+                              {item.product.name}
+                            </h4>
+                            <span className="text-[10px] text-zinc-400 font-mono font-normal">
+                              {item.quantity} шт. ×{" "}
+                              {item.price.toLocaleString("ru-RU")} ₽
+                            </span>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <h4 className="text-xs font-bold text-zinc-200 truncate pr-4">
-                            {item.product.name}
-                          </h4>
-                          <span className="text-[10px] text-zinc-500 font-mono font-bold">
-                            {item.quantity} шт. ×{" "}
-                            {item.price.toLocaleString("ru-RU")} ₽
-                          </span>
-                        </div>
+                        <span className="text-xs font-bold text-zinc-950 font-mono shrink-0">
+                          {(item.price * item.quantity).toLocaleString("ru-RU")}{" "}
+                          ₽
+                        </span>
                       </div>
-                      <span className="text-xs font-black text-zinc-400 font-mono shrink-0">
-                        {(item.price * item.quantity).toLocaleString("ru-RU")} ₽
-                      </span>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
-                {/* Нижняя часть: Итог */}
-                <div className="pt-3 border-t border-zinc-900/60 flex items-center justify-between">
-                  <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">
-                    Сумма заказа:
+                {/* Нижня часть бланка: Итог и действия */}
+                <div className="pt-3 border-t border-zinc-200 flex items-center justify-between">
+                  <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">
+                    Итоговая стоимость спецификации:
                   </span>
                   <div className="flex items-center gap-4">
-                    <span className="text-sm sm:text-base font-black text-white font-mono tracking-tight">
+                    <span className="text-base font-bold text-zinc-950 font-mono tracking-tight">
                       {order.totalAmount.toLocaleString("ru-RU")} ₽
                     </span>
 
-                    {/* Если заказ завис в PENDING, даем быструю кнопку доплатить шлюзом */}
                     {!isPaid && (
-                      <Link
-                        href={`/cart?status=success&orderId=${order.id}`}
-                        className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-extrabold text-[10px] uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95"
-                      >
-                        Оплатить сейчас
-                      </Link>
+                      <>
+                        <DeleteOrderButton orderId={order.id} />
+                        <Link
+                          href={`/cart?status=success&orderId=${order.id}`}
+                          className="px-4 py-2 bg-zinc-950 hover:bg-zinc-800 text-white font-black text-[9px] uppercase tracking-widest rounded-none transition-colors active:scale-[0.98]"
+                        >
+                          Оплатить заказ
+                        </Link>
+                      </>
                     )}
                   </div>
                 </div>

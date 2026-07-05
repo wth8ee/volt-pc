@@ -48,98 +48,104 @@ export default function SignUpPage() {
   };
 
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex flex-col items-center justify-center p-4 selection:bg-purple-500/20">
-      {/* Кнопка назад */}
+    <main className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center p-4 selection:bg-zinc-950 selection:text-white relative">
+      {/* Кнопка назад: тонкий мелкий шрифт */}
       <div className="w-full max-w-sm mb-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-bold text-zinc-500 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-950 transition-colors"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Назад в магазин
+          <ArrowLeft className="h-3 w-3 stroke-[1.8]" />
+          <span>Назад в магазин</span>
         </Link>
       </div>
 
-      {/* Карточка формы */}
-      <div className="w-full max-w-sm bg-zinc-900/30 border border-zinc-900 rounded-3xl p-6 md:p-8 backdrop-blur-md shadow-2xl">
+      {/* Контейнер строгой прямоугольной формы */}
+      <div className="w-full max-w-sm bg-white border border-zinc-200 rounded-none p-6 md:p-8">
+        {/* Заголовок */}
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="h-10 w-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3 shadow-lg shadow-purple-500/5">
-            <UserPlus className="h-5 w-5" />
+          <div className="h-10 w-10 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-950 mb-3">
+            <UserPlus className="h-4 w-4 stroke-[1.5]" />
           </div>
-          <h1 className="text-xl font-black text-white tracking-tight">
+          <h1 className="text-base font-bold uppercase tracking-wider text-zinc-950">
             Создать аккаунт
           </h1>
-          <p className="text-[11px] text-zinc-500 font-semibold mt-1">
-            Присоединяйтесь к экосистеме VoltPC
+          <p className="text-[10px] text-zinc-400 font-medium uppercase tracking-widest mt-1">
+            Регистрация в экосистеме VoltPC
           </p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
+          {/* Поле: Имя */}
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">
+            <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
               Имя
             </label>
             <div className="relative">
-              <User className="absolute left-3.5 top-3.5 h-4 w-4 text-zinc-600" />
+              <User className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-zinc-300 stroke-[1.8]" />
               <input
                 type="text"
                 required
                 placeholder="Алексей"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-purple-500/50 transition-colors"
+                className="w-full bg-white border border-zinc-200 rounded-none pl-10 pr-4 py-2.5 text-xs text-zinc-950 placeholder-zinc-300 focus:outline-none focus:border-zinc-950 transition-colors"
               />
             </div>
           </div>
 
+          {/* Поле: Email */}
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">
+            <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-zinc-600" />
+              <Mail className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-zinc-300 stroke-[1.8]" />
               <input
                 type="email"
                 required
                 placeholder="alex@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-purple-500/50 transition-colors"
+                className="w-full bg-white border border-zinc-200 rounded-none pl-10 pr-4 py-2.5 text-xs text-zinc-950 placeholder-zinc-300 focus:outline-none focus:border-zinc-950 transition-colors"
               />
             </div>
           </div>
 
+          {/* Поле: Пароль */}
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">
+            <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block">
               Пароль
             </label>
             <div className="relative">
-              <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-zinc-600" />
+              <Lock className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-zinc-300 stroke-[1.8]" />
               <input
                 type="password"
                 required
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-purple-500/50 transition-colors"
+                className="w-full bg-white border border-zinc-200 rounded-none pl-10 pr-4 py-2.5 text-xs text-zinc-950 placeholder-zinc-300 focus:outline-none focus:border-zinc-950 transition-colors"
               />
             </div>
           </div>
 
+          {/* Вывод ошибок Better Auth */}
           {error && (
-            <div className="p-3 rounded-xl bg-red-550/10 border border-red-500/20 text-red-400 text-[11px] font-bold text-center">
+            <div className="p-3 rounded-none bg-zinc-50 border border-zinc-200 text-red-600 text-[11px] font-bold text-center">
               {error}
             </div>
           )}
 
+          {/* Кнопка регистрации — брутальная черная плита */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-600/10 transition-all flex items-center justify-center gap-2 active:scale-98 cursor-pointer disabled:opacity-50"
+            className="w-full py-3.5 bg-zinc-950 hover:bg-zinc-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 active:scale-[0.98]"
           >
             {loading ? (
               <>
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-white" />
                 <span>Регистрация...</span>
               </>
             ) : (
@@ -148,11 +154,12 @@ export default function SignUpPage() {
           </button>
         </form>
 
-        <div className="text-center mt-6 pt-4 border-t border-zinc-900 text-xs font-semibold text-zinc-500">
+        {/* Ссылка на авторизацию */}
+        <div className="text-center mt-6 pt-4 border-t border-zinc-200 text-xs font-semibold text-zinc-400">
           Уже есть аккаунт?{" "}
           <Link
-            href="/sign-up"
-            className="text-purple-400 hover:text-purple-300 transition-colors"
+            href="/sign-in" // Ведёт на твою страницу входа
+            className="text-zinc-950 hover:text-zinc-600 font-bold transition-colors underline underline-offset-2"
           >
             Войти
           </Link>

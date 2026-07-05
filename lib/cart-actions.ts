@@ -237,3 +237,42 @@ export async function getDbOrders() {
     return { success: false, error: "Ошибка сервера", orders: [] };
   }
 }
+
+export async function dbDeleteOrder(orderId: string) {
+  try {
+    // 1. Проверяем сессию пользователя прямо на сервере
+    const session = await auth.api.getSession({ headers: await headers() });
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return { success: false, error: "Пользователь не авторизован" };
+    }
+
+    // 2. Ищем заказ и проверяем, что он принадлежит этому юзеру и НЕ оплачен
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!order) {
+      return { success: false, error: "Заказ не найден" };
+    }
+
+    if (order.userId !== userId) {
+      return { success: false, error: "Нет прав на удаление этого заказа" };
+    }
+
+    if (order.status !== "PENDING") {
+      return { success: false, error: "Нельзя удалить уже оплаченный заказ" };
+    }
+
+    // 3. Удаляем заказ из базы данных Prisma (связанные OrderItem удалятся автоматически благодаря onDelete: Cascade)
+    await prisma.order.delete({
+      where: { id: orderId },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Ошибка при удалении заказа из БД:", error);
+    return { success: false, error: "Ошибка сервера при удалении" };
+  }
+}

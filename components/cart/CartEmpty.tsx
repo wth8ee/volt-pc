@@ -37,119 +37,120 @@ export default function CartEmpty() {
   // СЦЕНАРИЙ 1: Идет загрузка деталей заказа из БД
   if (loading) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex flex-col items-center justify-center text-center p-4">
-        <Loader2 className="h-6 w-6 text-purple-500 animate-spin mb-2" />
-        <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">
-          Подтверждение платежа шлюзом...
+      <div className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center text-center p-4">
+        <Loader2 className="h-5 w-5 text-zinc-950 animate-spin mb-3 stroke-[1.5]" />
+        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
+          Проверка транзакции...
         </p>
       </div>
     );
   }
 
-  // СЦЕНАРИЙ 2: ЭКРАН УСПЕШНОЙ ОПЛАТЫ (Premium Кибер-Чек)
-  // СЦЕНАРИЙ 2: ЭКРАН УСПЕШНОЙ ОПЛАТЫ (Понятный пользовательский чек)
+  // СЦЕНАРИЙ 2: ЭКРАН УСПЕШНОЙ ОПЛАТЫ (Строгий монохромный чек)
   if (isSuccess && orderData) {
     return (
-      <main className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex flex-col items-center justify-center py-12 px-4 selection:bg-purple-500/20">
-        {/* Анимация индикатора успеха */}
-        <div className="h-14 w-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 shadow-xl shadow-emerald-500/5 animate-in zoom-in duration-300">
-          <CheckCircle2 className="h-6 w-6" />
+      <main className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center py-16 px-4 selection:bg-zinc-950 selection:text-white">
+        {/* Индикатор успеха без овалов и теней */}
+        <div className="h-12 w-12 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-950 mb-4">
+          <CheckCircle2 className="h-5 w-5 stroke-[1.5]" />
         </div>
 
-        <h2 className="text-2xl font-black text-white mb-1 tracking-tight text-center">
-          Заказ успешно оплачен!
+        <h2 className="text-xl font-bold uppercase tracking-tight text-zinc-950 mb-1 text-center">
+          Заказ успешно оплачен
         </h2>
-        <p className="text-xs text-zinc-500 max-w-sm mb-8 text-center leading-relaxed font-semibold">
-          Деньги получены, конфигурация принята в работу. Специалисты VoltPC уже
-          приступили к сборке и подготовке вашего железа к отправке.
+        <p className="text-xs text-zinc-400 max-w-sm mb-10 text-center leading-relaxed font-normal">
+          Транзакция подтверждена. Конфигурация принята в производство.
+          Специалисты VoltPC приступили к сборке и тестированию компонентов.
         </p>
 
-        {/* Чистый бланк деталей заказа */}
-        <div className="w-full max-w-xl bg-zinc-900/30 border border-zinc-900 rounded-3xl p-5 md:p-6 backdrop-blur-md shadow-2xl space-y-6 text-left animate-in fade-in slide-in-from-bottom-4 duration-400">
-          {/* Понятные параметры заказа для обычного человека */}
-          <div className="grid grid-cols-2 gap-4 pb-4 border-b border-zinc-900 text-xs font-semibold text-zinc-400">
+        {/* Строгий прямоугольный бланк деталей */}
+        <div className="w-full max-w-xl bg-white border border-zinc-200 rounded-none p-6 space-y-6 text-left">
+          {/* Параметры спецификации */}
+          <div className="grid grid-cols-2 gap-4 pb-5 border-b border-zinc-200 text-xs font-medium text-zinc-500">
             <div className="space-y-1">
-              <span className="text-[10px] uppercase font-black text-zinc-600 tracking-widest block">
-                Номер заказа
+              <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
+                Номер документа
               </span>
-              <span className="text-zinc-200 font-mono font-bold">
+              <span className="text-zinc-950 font-mono font-bold">
                 #{orderData.id.slice(0, 8).toUpperCase()}
               </span>
             </div>
             <div className="space-y-1 text-right">
-              <span className="text-[10px] uppercase font-black text-zinc-600 tracking-widest block">
-                Статус заказа
+              <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
+                Статус
               </span>
-              <span className="inline-flex items-center gap-1 text-emerald-400 font-extrabold text-[10px] uppercase tracking-wider bg-emerald-500/5 border border-emerald-500/20 px-2 py-0.5 rounded-md">
-                Оплачен
+              <span className="inline-flex items-center text-zinc-950 font-bold text-[9px] uppercase tracking-widest border border-zinc-950 px-2 py-0.5 rounded-none bg-white">
+                Подтвержден
               </span>
             </div>
             <div className="space-y-1">
-              <span className="text-[10px] uppercase font-black text-zinc-600 tracking-widest block">
-                Получатель
+              <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
+                Клиент
               </span>
-              <span className="text-zinc-300">{orderData.customerName}</span>
+              <span className="text-zinc-900">{orderData.customerName}</span>
             </div>
             <div className="space-y-1 text-right">
-              <span className="text-[10px] uppercase font-black text-zinc-600 tracking-widest block">
-                Почта для уведомлений
+              <span className="text-[9px] uppercase font-black text-zinc-400 tracking-widest block">
+                Адрес уведомлений
               </span>
-              <span className="text-zinc-300 truncate block max-w-[180px] md:max-w-none">
+              <span className="text-zinc-900 truncate block max-w-[180px] md:max-w-none">
                 {orderData.customerEmail}
               </span>
             </div>
           </div>
 
-          {/* Список купленного железа */}
-          <div className="space-y-3">
-            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-1">
-              Состав заказа
+          {/* Список оплаченных комплектующих встык */}
+          <div className="space-y-2">
+            <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest block mb-2">
+              Спецификация компонентов
             </span>
-            {orderData.items.map((item: any) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between gap-4 bg-zinc-900/40 border border-zinc-900/60 p-3 rounded-xl"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="h-10 w-10 bg-white rounded-lg p-0.5 shrink-0 flex items-center justify-center border border-zinc-900">
-                    <img
-                      src={item.product.images[0] || item.product.images}
-                      alt={item.product.name}
-                      className="object-contain w-full h-full"
-                    />
+            <div className="border-t border-l border-zinc-200">
+              {orderData.items.map((item: any) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between gap-4 bg-white border-r border-b border-zinc-200 p-3"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="h-9 w-9 bg-white rounded-none p-0.5 shrink-0 flex items-center justify-center border border-zinc-100 mix-blend-multiply">
+                      <img
+                        src={item.product.images[0] || item.product.images}
+                        alt={item.product.name}
+                        className="object-contain w-full h-full"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <h5 className="text-xs font-medium text-zinc-900 truncate pr-2">
+                        {item.product.name}
+                      </h5>
+                      <span className="text-[11px] text-zinc-400 font-mono font-normal">
+                        {item.quantity} шт. ×{" "}
+                        {item.price.toLocaleString("ru-RU")} ₽
+                      </span>
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <h5 className="text-xs font-bold text-zinc-200 truncate pr-2">
-                      {item.product.name}
-                    </h5>
-                    <span className="text-[11px] text-zinc-500 font-mono font-medium">
-                      {item.quantity} шт. × {item.price.toLocaleString("ru-RU")}{" "}
-                      ₽
-                    </span>
-                  </div>
+                  <span className="text-xs font-bold text-zinc-950 font-mono shrink-0">
+                    {(item.price * item.quantity).toLocaleString("ru-RU")} ₽
+                  </span>
                 </div>
-                <span className="text-xs font-black text-zinc-300 font-mono shrink-0">
-                  {(item.price * item.quantity).toLocaleString("ru-RU")} ₽
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
-          {/* Итоговый футер чека */}
-          <div className="pt-4 border-t border-zinc-900 flex items-center justify-between">
+          {/* Итоговый футер бланка */}
+          <div className="pt-4 border-t border-zinc-200 flex items-center justify-between">
             <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
-              Сумма заказа:
+              Итоговая стоимость:
             </span>
-            <span className="text-lg font-black text-white font-mono tracking-tight">
+            <span className="text-base font-bold text-zinc-950 font-mono tracking-tight">
               {orderData.totalAmount.toLocaleString("ru-RU")} ₽
             </span>
           </div>
         </div>
 
-        {/* Кнопка на главную */}
+        {/* Кнопка возврата — строгая черная плитка */}
         <Link
           href="/"
-          className="mt-8 px-6 py-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white rounded-xl text-xs font-bold transition-all active:scale-98 cursor-pointer"
+          className="mt-10 px-6 py-3.5 bg-zinc-950 hover:bg-zinc-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-colors active:scale-[0.98] cursor-pointer"
         >
           Вернуться в каталог
         </Link>
@@ -159,18 +160,20 @@ export default function CartEmpty() {
 
   // СЦЕНАРИЙ 3: ДЕФОЛТНАЯ ПУСТАЯ КОРЗИНА (Если параметров в URL нет)
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex flex-col items-center justify-center text-center p-4">
-      <div className="h-12 w-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 mb-4 shadow-xl">
-        <ShoppingBag className="h-5 w-5" />
+    <main className="min-h-[calc(100vh-4rem)] bg-white flex flex-col items-center justify-center text-center p-4">
+      <div className="h-12 w-12 rounded-none bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-400 mb-4">
+        <ShoppingBag className="h-4 w-4 stroke-[1.5]" />
       </div>
-      <h2 className="text-xl font-black text-white mb-1">Ваша корзина пуста</h2>
-      <p className="text-xs text-zinc-500 max-w-xs mb-6 font-semibold">
-        Добавьте процессоры, видеокарты или материнские платы из каталога, чтобы
-        оформить заказ.
+      <h2 className="text-base font-bold uppercase tracking-tight text-zinc-950 mb-1">
+        Ваша корзина пуста
+      </h2>
+      <p className="text-xs text-zinc-400 max-w-xs mb-8 font-normal leading-relaxed">
+        Вы еще не добавили ни одного компонента. Перейдите в каталог для подбора
+        процессоров, видеокарт или материнских плат.
       </p>
       <Link
         href="/"
-        className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition-all shadow-md"
+        className="px-5 py-3 bg-zinc-950 hover:bg-zinc-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-colors active:scale-[0.98]"
       >
         Перейти в каталог
       </Link>

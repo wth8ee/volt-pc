@@ -65,102 +65,125 @@ export default function Navbar() {
     : "U";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-900 bg-zinc-950 backdrop-blur-md selection:bg-purple-500/20">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-250 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        {/* Логотип бренда */}
+        {/* Логотип бренда — строгий монохромный стиль без фиолетового неона */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="relative flex items-center justify-center text-purple-500 group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] transition-all duration-300">
-            <Zap className="h-5 w-5 fill-purple-500/10" />
+          <div className="relative flex items-center justify-center text-zinc-950 transition-colors">
+            <Zap className="h-4.5 w-4.5 fill-zinc-950/5 stroke-[1.8]" />
           </div>
-          <span className="text-lg font-black tracking-tight text-white group-hover:text-purple-400 transition-colors">
-            Volt<span className="text-zinc-500 font-medium">PC</span>
+          <span className="text-base font-black uppercase tracking-widest text-zinc-950 group-hover:text-zinc-600 transition-colors">
+            Volt
+            <span className="text-zinc-400 font-light font-sans lowercase">
+              pc
+            </span>
           </span>
         </Link>
 
-        {/* Навигационные ссылки */}
-        <nav className="hidden md:flex items-center gap-6 text-[11px] font-bold text-zinc-500 uppercase tracking-widest">
+        {/* Навигационные ссылки — плоский строгий шрифт */}
+        <nav className="hidden md:flex items-center gap-8 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
           <Link
             href="/"
-            className="text-white hover:text-purple-400 transition-colors"
+            className="text-zinc-950 hover:text-zinc-500 transition-colors"
           >
             Каталог
           </Link>
-          <Link href="#" className="hover:text-purple-400 transition-colors">
+          <Link href="#" className="hover:text-zinc-500 transition-colors">
             Сборщик ПК
           </Link>
-          <Link href="#" className="hover:text-purple-400 transition-colors">
+          <Link href="#" className="hover:text-zinc-500 transition-colors">
             Гарантия
           </Link>
-          <Link href="#" className="hover:text-purple-400 transition-colors">
+          <Link href="#" className="hover:text-zinc-500 transition-colors">
             Доставка
           </Link>
         </nav>
 
         {/* Правый блок */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {/* ================= ЛОГИКА АВТОРИЗАЦИИ В НАВБАРЕ ================= */}
           {mounted && session?.user ? (
-            // ЕСЛИ ЮЗЕР ВОШЕЛ: Показываем премиальный выпадающий список профиля
+            // ЕСЛИ ЮЗЕР ВОШЕЛ: Строгое прямоугольное выпадающее меню
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-2 outline-none cursor-pointer group">
-                <div className="h-8 w-8 rounded-xl bg-purple-600/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xs font-black shadow-inner shadow-purple-500/5 group-hover:border-purple-400 transition-colors">
-                  {<span>{userInitials}</span>}
+              <DropdownMenuTrigger className="flex items-center gap-1 outline-none cursor-pointer group">
+                <div className="h-8 w-8 rounded-none border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-950 text-xs font-black group-hover:border-zinc-950 transition-colors">
+                  {session.user.image ? (
+                    <img
+                      src={session.user.image}
+                      alt={session.user.name}
+                      className="h-full w-full object-cover rounded-none"
+                    />
+                  ) : (
+                    <span>{userInitials}</span>
+                  )}
                 </div>
-                <ChevronDown className="h-3 w-3 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+                <ChevronDown className="h-3 w-3 text-zinc-400 group-hover:text-zinc-950 transition-colors" />
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent className="w-56 bg-zinc-950 border border-zinc-900 rounded-2xl p-2 text-zinc-300 shadow-xl mt-1">
-                <DropdownMenuLabel className="px-2.5 py-2">
+              {/* 🔥 Изменили плашку: убрали скругления, добавили строгие границы и тень */}
+              <DropdownMenuContent className="w-56 bg-white border border-zinc-200 rounded-none p-0 text-zinc-800 shadow-xl mt-1 animate-in fade-in duration-100 z-50">
+                {/* Шапка меню с именем и почтой */}
+                <div className="px-4 py-3.5 border-b border-zinc-100 bg-zinc-50/50">
                   <div className="flex flex-col space-y-0.5">
-                    <span className="text-xs font-black text-white truncate">
+                    <span className="text-xs font-bold text-zinc-950 tracking-tight">
                       {session.user.name}
                     </span>
-                    <span className="text-[10px] text-zinc-500 font-medium truncate">
+                    <span className="text-[10px] text-zinc-400 font-medium font-mono">
                       {session.user.email}
                     </span>
                   </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-zinc-900 my-1" />
+                </div>
 
-                <Link href="/orders" className="block w-full">
-                  <DropdownMenuItem className="flex items-center gap-2.5 px-2.5 py-2 text-xs font-bold rounded-xl hover:bg-zinc-900 hover:text-white cursor-pointer transition-colors">
-                    <Package className="h-3.5 w-3.5 text-zinc-500" />
-                    <span>Мои заказы</span>
+                {/* Ссылки управления */}
+                <div className="p-1 space-y-0.5">
+                  <Link href="/orders" className="block w-full">
+                    <DropdownMenuItem className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-none text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50 cursor-pointer transition-colors outline-none data-[disabled]:pointer-events-none">
+                      <Package className="h-3.5 w-3.5 text-zinc-400 stroke-[1.5]" />
+                      <span>Мои заказы</span>
+                    </DropdownMenuItem>
+                  </Link>
+
+                  <DropdownMenuItem className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-none text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50 cursor-pointer transition-colors outline-none data-[disabled]:pointer-events-none">
+                    <Shield className="h-3.5 w-3.5 text-zinc-400 stroke-[1.5]" />
+                    <span>Личный кабинет</span>
                   </DropdownMenuItem>
-                </Link>
+                </div>
 
-                <DropdownMenuItem className="flex items-center gap-2.5 px-2.5 py-2 text-xs font-bold rounded-xl hover:bg-zinc-900 hover:text-white cursor-pointer">
-                  <Shield className="h-3.5 w-3.5 text-zinc-500" />
-                  <span>Личный кабинет</span>
-                </DropdownMenuItem>
+                {/* Тонкий разделитель перед выходом */}
+                <div className="h-[1px] bg-zinc-100" />
 
-                <DropdownMenuSeparator className="bg-zinc-900 my-1" />
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="flex items-center gap-2.5 px-2.5 py-2 text-xs font-bold text-red-400 rounded-xl hover:bg-red-550/10 hover:text-red-400 cursor-pointer"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                  <span>Выйти из аккаунта</span>
-                </DropdownMenuItem>
+                {/* Зона выхода */}
+                <div className="p-1">
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-none text-red-600 hover:bg-red-50/50 cursor-pointer transition-colors outline-none data-[disabled]:pointer-events-none"
+                  >
+                    <LogOut className="h-3.5 w-3.5 stroke-[1.8]" />
+                    <span className="font-bold">Выйти из аккаунта</span>
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            // ЕСЛИ ЮЗЕР ГОСТЬ: Показываем красивую пустую иконку, ведущую на логин
+            // ЕСЛИ ЮЗЕР ГОСТЬ: Строгий прямоугольный инпут входа
             <Link
-              href="/sign-in" // Поменяли /sign-up на /login, оттуда он сможет и зарегистрироваться
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-800 text-zinc-500 hover:text-white hover:border-zinc-700 transition-all cursor-pointer"
+              href="/sign-in"
+              className="flex h-8 w-8 items-center justify-center rounded-none border border-zinc-200 text-zinc-400 hover:text-zinc-950 hover:border-zinc-950 transition-colors cursor-pointer"
               title="Войти в личный кабинет"
             >
-              <User className="h-4 w-4" />
+              <User className="h-3.5 w-3.5 stroke-[1.8]" />
             </Link>
           )}
+          {/* =============================================================== */}
+
+          {/* Корзина: Плоский глубокий черный квадрат с белым бейджем */}
           <Link
             href="/cart"
-            className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-purple-600 text-white shadow-md shadow-purple-600/10 hover:bg-purple-500 transition-colors"
+            className="relative flex h-8 w-8 items-center justify-center rounded-none bg-zinc-950 text-white hover:bg-zinc-800 transition-colors"
           >
-            <ShoppingCart className="h-4 w-4" />
+            <ShoppingCart className="h-3.5 w-3.5 stroke-[1.8]" />
             {mounted && totalItems > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[9px] font-black text-zinc-950 font-mono ring-2 ring-zinc-950 animate-in zoom-in duration-200">
+              <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-none bg-zinc-950 text-[8px] font-black text-white font-mono ring-1 ring-white">
                 {totalItems}
               </span>
             )}

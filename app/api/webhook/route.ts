@@ -1,6 +1,10 @@
 import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Resend } from "resend";
+import { generateOrderEmailHtml } from "@/lib/email-template";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
@@ -45,14 +49,46 @@ export async function POST(req: Request) {
     }
 
     // 5. ЖЕЛЕЗНЫЙ АПДЕЙТ: Меняем статус заказа на Успешно Оплачен
-    await prisma.order.update({
+    const updatedOrder = await prisma.order.update({
       where: { id: orderId },
       data: { status: "SUCCEEDED" },
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+      },
     });
 
     console.log(
       `🎉 Заказ №${orderId.slice(0, 8)} успешно оплачен через ЮKassa и обновлен в БД!`,
     );
+
+    try {
+      // На бесплатном тарифе шлем на ТВОЮ почту в Resend (замени на свою или оставь "onboarding@resend.dev")
+      // Когда привяжешь домен, сюда можно будет подставить ультимативно: updatedOrder.customerEmail
+      // const targetEmail =
+      //   process.env.NODE_ENV === "production"
+      //     ? updatedOrder.customerEmail || "onboarding@resend.dev"
+      //     : "onboarding@resend.dev";
+
+      const targetEmail = "wth8eeyv2@gmail.com";
+
+      await resend.emails.send({
+        from: "VoltPC <onboarding@resend.dev>", // На бесплатном тарифе отправка идет только с этого адреса
+        to: targetEmail,
+        subject: `Спецификация к заказу №${updatedOrder.id.slice(0, 8).toUpperCase()}`,
+        html: generateOrderEmailHtml(updatedOrder), // Вставляем наш строгий HTML-шаблон
+      });
+
+      console.log(
+        `✉️ Электронный чек успешно отправлен на адрес: ${targetEmail}`,
+      );
+    } catch (emailError) {
+      // Если почта не ушла, мы не ломаем вебхук ЮKassa (ведь деньги-то списались), а просто логируем сбой
+      console.error("Ошибка при отправке email-уведомления:", emailError);
+    }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
