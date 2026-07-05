@@ -1,0 +1,168 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  orders Order[]
+  cart   Cart?
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     DbCartItem[]
+  updatedAt DateTime   @updatedAt
+}
+
+model DbCartItem {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int
+  
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId]) // У одного юзера товар в корзине не должен дублироваться строками
+}
+
+// 1. Категории товаров (Смартфоны, Ноутбуки, Аксессуары)
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+// 2. Сам товар (Гаджет)
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Int      // Цену храним в копейках или целых рублях (для ЮKassa нужны рубли)
+  images      String[] // Массив ссылок на картинки товара
+  rating      Float    @default(5.0)
+  inStock     Boolean  @default(true)
+  brand       String
+  orderItems  OrderItem[]
+  cartItems   DbCartItem[]
+  
+  // Связь с категорией
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  // Дополнительные технические характеристики (JSON для гибкости: цвет, память, процессор)
+  features    Json
+
+  // Связь со строками заказов
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 3. Заказ (создается при оформлении)
+model Order {
+  id            String      @id @default(uuid())
+  totalAmount   Int
+  status        OrderStatus @default(PENDING) // Статус оплаты
+  paymentId     String?     @unique           // ID платежа, который выдаст ЮKassa
+  customerName  String
+  customerEmail String?
+  items         OrderItem[]
+  createdAt     DateTime    @default(now())
+
+  userId        String?
+  user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+// 4. Позиции внутри заказа (чтобы помнить, что именно и по какой цене купили)
+model OrderItem {
+  id        String  @id @default(uuid())
+  quantity  Int
+  price     Int     // Фиксируем цену на момент покупки
+  
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+// Перечисление статусов заказа для ЮKassa
+enum OrderStatus {
+  PENDING    // Ожидает оплаты
+  SUCCEEDED  // Успешно оплачен
+  CANCELED   // Отменен/Истек
+}
