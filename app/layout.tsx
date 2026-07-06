@@ -23,6 +23,10 @@ export const metadata: Metadata = {
   title: "VoltPC — Магазин топовых комплектующих для ПК",
   description:
     "Видеокарты, процессоры и оперативная память от ASUS, NVIDIA, Intel и AMD по лучшим ценам.",
+  other: {
+    "content-security-policy":
+      "connect-src 'self' wss://mc.yandex.ru https://mc.yandex.ru;",
+  },
 };
 
 export default async function RootLayout({
