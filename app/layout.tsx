@@ -19,23 +19,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const cspDirectives = [
-  "default-src 'self';",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://mc.yandex.ru https://yookassa.ru https://static.yookassa.ru;",
-  "connect-src 'self' wss://mc.yandex.ru wss://mc.yandex.ru/solid.ws https://mc.yandex.ru https://*.yandex.ru https://*.yandex.az https://*.yandex.by https://*.yandex.co.il https://*.yandex.com https://*.yandex.com.am https://*.yandex.com.ge https://*.yandex.com.tr https://*.yandex.ee https://*.yandex.fr https://*.yandex.kg https://*.yandex.kz https://*.yandex.lt https://*.yandex.lv https://*.yandex.md https://*.yandex.tj https://*.yandex.tm https://*.yandex.uz https://*.sberbank.ru https://*.nspk.ru https://*.yoomoney.ru https://*.yoomoney.ru:* https://127.0.0.1:* https://api.bonuscake.ru https://yookassa.ru https://api.yookassa.ru;",
-  "style-src 'self' 'unsafe-inline' https://yookassa.ru https://static.yookassa.ru;",
-  "img-src 'self' blob: data: https://mc.yandex.ru https://yookassa.ru https://static.yookassa.ru;",
-  "frame-src 'self' https://yookassa.ru https://*.sberbank.ru;",
-];
-
 export const metadata: Metadata = {
   title: "VoltPC — Магазин топовых комплектующих для ПК",
   description:
     "Видеокарты, процессоры и оперативная память от ASUS, NVIDIA, Intel и AMD по лучшим ценам.",
-  other: {
-    // Передаем весь массив, объединенный через пробел, без лишних двоеточий
-    "content-security-policy": cspDirectives.join(" "),
-  },
 };
 
 export default async function RootLayout({
@@ -46,6 +33,8 @@ export default async function RootLayout({
   const serverSession = await auth.api.getSession({
     headers: await headers(),
   });
+
+  const nonce = (await headers()).get("x-nonce") || undefined;
 
   return (
     <AuthProvider initialSession={serverSession}>
@@ -60,6 +49,7 @@ export default async function RootLayout({
           inter.variable,
         )}
       >
+        <head nonce={nonce} />
         <body className="min-h-full flex flex-col bg-white text-zinc-950">
           <Navbar />
           {children}
