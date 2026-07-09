@@ -30,11 +30,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const currentHeaders = await headers();
+
   const serverSession = await auth.api.getSession({
-    headers: await headers(),
+    headers: currentHeaders,
   });
 
-  const nonce = (await headers()).get("x-nonce") || undefined;
+  const nonce = currentHeaders.get("x-nonce") || undefined;
 
   return (
     <AuthProvider initialSession={serverSession}>
@@ -49,6 +51,7 @@ export default async function RootLayout({
           inter.variable,
         )}
       >
+        {/* Теперь nonce гарантированно попадет в head без багов кэширования Vercel */}
         <head nonce={nonce} />
         <body className="min-h-full flex flex-col bg-white text-zinc-950">
           <Navbar />
